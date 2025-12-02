@@ -1,34 +1,44 @@
+data "ibm_is_ssh_key" "ssh" {
+  name = var.ssh_key_name
+}
+
 resource "ibm_is_instance" "ontap_node1" {
-  name    = "ontap-node1"
-  image   = var.ontap_image_id   # imagem customizada com ONTAP/ontap-select
-  profile = "bx2-8x32"
-  zone    = "us-south-1"
+  name    = "${var.resource_prefix}-ontap-node1"
+  image   = var.ontap_image_id
+  profile = var.ontap_profile
+  zone    = var.zone
 
   primary_network_interface {
-    subnet         = var.mgmt_subnet_id
-    security_groups = [var.sg_id]
+    subnet           = ibm_is_subnet.mgmt.id
+    security_groups  = [ibm_is_security_group.ontap_sg.id]
   }
 
-  vpc  = var.vpc_id
-  keys = [var.ssh_key_id]
+  network_interfaces {
+    subnet          = ibm_is_subnet.data.id
+    security_groups = [ibm_is_security_group.ontap_sg.id]
+  }
+
+  vpc  = ibm_is_vpc.ontap_vpc.id
+  keys = [data.ibm_is_ssh_key.ssh.id]
 
   boot_volume {
-    name = "ontap-node1-boot"
-    size = 100
+    name = "${var.resource_prefix}-ontap-node1-boot"
+    size = var.boot_volume_size
   }
 
   user_data = file("${path.module}/cloud-init-ontap-node1.yaml")
 }
 
-# Volumes de dados
-resource "ibm_is_volume" "ontap_node1_data1" {
-  name    = "ontap-node1-data1"
-  profile = "general-purpose"
-  capacity = 500
-  zone     = "us-south-1"
+resource "ibm_is_volume" "ontap_node1_data" {
+  count    = var.data_disks_per_node
+  name     = "${var.resource_prefix}-ontap-node1-data-${count.index + 1}"
+  profile  = var.data_disk_profile
+  capacity = var.data_disk_size
+  zone     = var.zone
 }
 
-resource "ibm_is_volume_attachment" "ontap_node1_data1_attach" {
+resource "ibm_is_volume_attachment" "ontap_node1_data_attach" {
+  count    = var.data_disks_per_node
   instance = ibm_is_instance.ontap_node1.id
-  volume   = ibm_is_volume.ontap_node1_data1.id
+  volume   = ibm_is_volume.ontap_node1_data[count.index].id
 }
