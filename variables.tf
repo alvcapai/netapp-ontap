@@ -157,3 +157,114 @@ variable "resource_prefix" {
   type        = string
   default     = "ontap"
 }
+
+###############################################
+# Cloud Object Storage para imagem ONTAP
+###############################################
+
+variable "cos_instance_name" {
+  description = "Nome da instância de Cloud Object Storage."
+  type        = string
+  default     = "ontap-cos"
+}
+
+variable "cos_bucket_name" {
+  description = "Nome do bucket onde a imagem ONTAP será enviada."
+  type        = string
+  default     = "ontap-image-bucket"
+}
+
+variable "cos_resource_group" {
+  description = "Nome do resource group para a instância de COS."
+  type        = string
+  default     = "Default"
+}
+
+variable "ontap_image_object_key" {
+  description = "Nome do objeto (key) da imagem ONTAP no bucket COS."
+  type        = string
+  default     = "ontap-image.qcow2"
+}
+
+variable "ontap_image_file" {
+  description = "Caminho local para o arquivo de imagem ONTAP a ser enviado ao COS."
+  type        = string
+  default     = ""
+}
+
+variable "upload_local_image" {
+  description = "Se true, envia o arquivo local ontap_image_file para o COS."
+  type        = bool
+  default     = false
+}
+
+###############################################
+# Conversão OVA -> QCOW2 (máquina helper)
+###############################################
+
+variable "converter_instance_name" {
+  description = "Nome da instância helper para converter OVA em QCOW2."
+  type        = string
+  default     = "ontap-image-converter"
+}
+
+variable "converter_profile" {
+  description = "Perfil da instância helper."
+  type        = string
+  default     = "bx2-4x16"
+}
+
+variable "converter_base_image_name" {
+  description = "Nome da imagem base (ex: Ubuntu) para a instância helper."
+  type        = string
+  default     = "ibm-ubuntu-22-04-3-minimal-amd64-3"
+}
+
+variable "converter_ssh_key_name" {
+  description = "Nome da chave SSH para acessar a instância helper."
+  type        = string
+}
+
+variable "converter_subnet" {
+  description = "Subnet ID para a instância helper (use a mgmt subnet)."
+  type        = string
+  default     = ""
+}
+
+variable "converter_security_group" {
+  description = "Security group ID para a instância helper."
+  type        = string
+  default     = ""
+}
+
+variable "converter_zone" {
+  description = "Zona para a instância helper (normalmente igual à zona principal)."
+  type        = string
+  default     = "us-south-1"
+}
+
+variable "converter_source_ova_url" {
+  description = "URL HTTP/HTTPS do OVA de origem para converter."
+  type        = string
+  default     = ""
+  validation {
+    condition     = var.converter_source_ova_url != ""
+    error_message = "Defina converter_source_ova_url com a URL do OVA."
+  }
+}
+
+variable "converter_output_object_key" {
+  description = "Key do objeto QCOW2 gerado no COS."
+  type        = string
+  default     = "ontap-image.qcow2"
+}
+
+variable "converter_cos_bucket" {
+  description = "Bucket destino no COS para o QCOW2 gerado."
+  type        = string
+  default     = ""
+  validation {
+    condition     = var.converter_cos_bucket != ""
+    error_message = "Defina converter_cos_bucket com o bucket de destino."
+  }
+}
