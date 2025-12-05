@@ -212,6 +212,12 @@ variable "cos_resource_group" {
   default     = "Default"
 }
 
+variable "cos_location" {
+  description = "Localização da instância de COS (normalmente 'global')."
+  type        = string
+  default     = "global"
+}
+
 variable "ontap_image_object_key" {
   description = "Nome do objeto (key) da imagem ONTAP no bucket COS."
   type        = string
