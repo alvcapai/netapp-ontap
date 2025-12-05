@@ -11,14 +11,15 @@ resource "ibm_is_ssh_key" "converter_key" {
 }
 
 locals {
-  converter_subnet_id = coalesce(
+  converter_subnet_id = local.infra_enabled ? coalesce(
     var.converter_subnet != "" ? var.converter_subnet : null,
     try(ibm_is_subnet.mgmt[0].id, null),
-  )
-  converter_sg_id = coalesce(
+  ) : null
+
+  converter_sg_id = local.infra_enabled ? coalesce(
     var.converter_security_group != "" ? var.converter_security_group : null,
     try(ibm_is_security_group.ontap_sg[0].id, null),
-  )
+  ) : null
 }
 
 resource "ibm_is_instance" "converter" {
