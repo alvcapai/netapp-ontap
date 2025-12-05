@@ -39,11 +39,13 @@ resource "ibm_is_instance" "converter" {
   resource_group = ibm_resource_group.rg.id
 
   user_data = local.infra_enabled ? templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {
-    source_ova_url    = var.converter_source_ova_url
-    output_object_key = var.converter_output_object_key
-    bucket_name       = var.converter_cos_bucket
-    region            = var.region
-    cos_instance_crn  = ibm_resource_instance.cos.crn
-    api_key           = var.ibmcloud_api_key
+    source_ova_url           = var.converter_source_ova_url
+    source_ova_bucket        = var.converter_source_bucket
+    source_ova_object_key    = var.converter_source_object_key
+    output_object_key        = var.converter_output_object_key
+    bucket_name              = var.converter_cos_bucket
+    region                   = var.region
+    cos_instance_crn         = ibm_resource_instance.cos.crn
+    api_key                  = var.ibmcloud_api_key
   }) : null
 }

@@ -301,9 +301,21 @@ variable "converter_source_ova_url" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || var.converter_source_ova_url != ""
-    error_message = "Defina converter_source_ova_url com a URL do OVA."
+    condition     = var.cos_only || var.converter_source_ova_url != "" || (var.converter_source_bucket != "" && var.converter_source_object_key != "")
+    error_message = "Defina converter_source_ova_url ou (converter_source_bucket e converter_source_object_key) para a origem do OVA."
   }
+}
+
+variable "converter_source_bucket" {
+  description = "Bucket COS onde o OVA de origem está armazenado (alternativa ao converter_source_ova_url)."
+  type        = string
+  default     = ""
+}
+
+variable "converter_source_object_key" {
+  description = "Key do OVA de origem no COS (alternativa ao converter_source_ova_url)."
+  type        = string
+  default     = ""
 }
 
 variable "converter_output_object_key" {
