@@ -26,7 +26,7 @@ resource "ibm_is_instance" "ontap_node1" {
 
   boot_volume {
     name = "${var.resource_prefix}-ontap-node1-boot"
-    capacity = var.boot_volume_size
+    size = var.boot_volume_size
   }
 
   user_data = file("${path.module}/cloud-init-ontap-node1.yaml")
@@ -40,7 +40,7 @@ resource "ibm_is_volume" "ontap_node1_data" {
   zone     = var.zone
 }
 
-resource "ibm_is_volume_attachment" "ontap_node1_data_attach" {
+resource "ibm_is_instance_volume_attachment" "ontap_node1_data_attach" {
   count    = local.infra_enabled ? var.data_disks_per_node : 0
   instance = ibm_is_instance.ontap_node1[0].id
   volume   = ibm_is_volume.ontap_node1_data[count.index].id
