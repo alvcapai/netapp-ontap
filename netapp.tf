@@ -1,5 +1,5 @@
 resource "ibm_is_ssh_key" "ssh" {
-  count          = local.ontap_count
+  count          = local.infra_count
   name           = var.ssh_key_name
   public_key     = var.ssh_public_key
   resource_group = ibm_resource_group.rg.id

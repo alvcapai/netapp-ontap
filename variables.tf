@@ -268,20 +268,12 @@ variable "converter_ssh_key_name" {
   description = "Nome da chave SSH para acessar a instância helper."
   type        = string
   default     = ""
-  validation {
-    condition     = var.cos_only || var.converter_ssh_key_name != ""
-    error_message = "Defina converter_ssh_key_name para implantar a instância helper."
-  }
 }
 
 variable "converter_ssh_public_key" {
   description = "Conteúdo da chave pública para a instância helper."
   type        = string
   default     = ""
-  validation {
-    condition     = var.cos_only || var.converter_ssh_public_key != ""
-    error_message = "Defina converter_ssh_public_key para implantar a instância helper."
-  }
 }
 
 variable "converter_subnet" {
