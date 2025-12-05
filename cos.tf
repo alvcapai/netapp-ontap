@@ -17,12 +17,3 @@ resource "ibm_cos_bucket" "ontap_image" {
   storage_class        = "standard"
   force_delete         = true
 }
-
-resource "ibm_cos_bucket_object" "ontap_image_object" {
-  count      = var.upload_local_image ? 1 : 0
-  bucket_crn = ibm_cos_bucket.ontap_image.crn
-  key        = var.ontap_image_object_key
-  file_path  = var.ontap_image_file
-  etag       = var.upload_local_image ? filemd5(var.ontap_image_file) : null
-  bucket_location = var.region
-}
