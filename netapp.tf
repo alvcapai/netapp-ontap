@@ -1,5 +1,6 @@
-data "ibm_is_ssh_key" "ssh" {
-  name = var.ssh_key_name
+resource "ibm_is_ssh_key" "ssh" {
+  name       = var.ssh_key_name
+  public_key = var.ssh_public_key
 }
 
 resource "ibm_is_instance" "ontap_node1" {
@@ -19,7 +20,7 @@ resource "ibm_is_instance" "ontap_node1" {
   }
 
   vpc  = ibm_is_vpc.ontap_vpc.id
-  keys = [data.ibm_is_ssh_key.ssh.id]
+  keys = [ibm_is_ssh_key.ssh.id]
 
   boot_volume {
     name = "${var.resource_prefix}-ontap-node1-boot"

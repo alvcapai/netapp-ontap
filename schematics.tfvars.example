@@ -3,7 +3,10 @@
 
 ibmcloud_api_key = "<your_ibm_cloud_api_key>"
 ssh_key_name     = "<your_ssh_key_name_in_ibm_cloud>"
+ssh_public_key   = "<ssh_rsa_or_ed25519_public_key_contents>"
 ontap_image_id   = "<your_custom_ontap_image_id>"
+converter_ssh_key_name   = "<ssh key name for helper>"
+converter_ssh_public_key = "<ssh_rsa_or_ed25519_public_key_contents_for_helper>"
 
 # Optional overrides (uncomment to change defaults)
 # region            = "us-south"
@@ -31,7 +34,6 @@ ontap_image_id   = "<your_custom_ontap_image_id>"
 # converter_instance_name = "ontap-image-converter"
 # converter_profile   = "bx2-4x16"
 # converter_base_image_name = "ibm-ubuntu-22-04-3-minimal-amd64-3"
-# converter_ssh_key_name = "<ssh key name for helper>"
 # converter_subnet    = ""   # leave empty to use mgmt subnet
 # converter_security_group = "" # leave empty to use ontap_sg
 # converter_zone      = "us-south-1"

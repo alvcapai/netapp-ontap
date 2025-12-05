@@ -2,8 +2,9 @@ data "ibm_is_image" "converter_base" {
   name = var.converter_base_image_name
 }
 
-data "ibm_is_ssh_key" "converter_key" {
-  name = var.converter_ssh_key_name
+resource "ibm_is_ssh_key" "converter_key" {
+  name       = var.converter_ssh_key_name
+  public_key = var.converter_ssh_public_key
 }
 
 locals {
@@ -23,7 +24,7 @@ resource "ibm_is_instance" "converter" {
   }
 
   vpc  = ibm_is_vpc.ontap_vpc.id
-  keys = [data.ibm_is_ssh_key.converter_key.id]
+  keys = [ibm_is_ssh_key.converter_key.id]
 
   user_data = templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {
     source_ova_url       = var.converter_source_ova_url

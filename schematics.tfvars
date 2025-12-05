@@ -2,7 +2,12 @@
 # workspace variables (UI/API). Required variables to set in the workspace:
 #   - ibmcloud_api_key (Secure String)
 #   - ssh_key_name
+#   - ssh_public_key
 #   - ontap_image_id
+#   - converter_ssh_key_name
+#   - converter_ssh_public_key
+#   - converter_source_ova_url
+#   - converter_cos_bucket
 #
 # Optional overrides you may also set in the workspace:
 #   region, zone, vpc_name, mgmt_subnet_cidr, data_subnet_cidr, resource_prefix,

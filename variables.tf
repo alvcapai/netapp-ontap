@@ -51,6 +51,11 @@ variable "ssh_key_name" {
   type        = string
 }
 
+variable "ssh_public_key" {
+  description = "Conteúdo da chave pública SSH."
+  type        = string
+}
+
 ###############################################
 # ONTAP Nodes
 ###############################################
@@ -222,6 +227,11 @@ variable "converter_base_image_name" {
 
 variable "converter_ssh_key_name" {
   description = "Nome da chave SSH para acessar a instância helper."
+  type        = string
+}
+
+variable "converter_ssh_public_key" {
+  description = "Conteúdo da chave pública para a instância helper."
   type        = string
 }
 
