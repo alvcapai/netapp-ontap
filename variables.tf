@@ -14,6 +14,12 @@ variable "cos_only" {
   default     = false
 }
 
+variable "deploy_ontap" {
+  description = "Controla o provisionamento da infraestrutura ONTAP (false permite executar apenas o helper de conversão)."
+  type        = bool
+  default     = true
+}
+
 variable "region" {
   description = "Região onde os recursos serão criados."
   type        = string
