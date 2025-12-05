@@ -8,6 +8,12 @@ variable "ibmcloud_api_key" {
   sensitive   = true
 }
 
+variable "cos_only" {
+  description = "Se true, cria apenas COS; execute novamente com false após enviar a imagem para continuar o deploy."
+  type        = bool
+  default     = false
+}
+
 variable "region" {
   description = "Região onde os recursos serão criados."
   type        = string
@@ -49,11 +55,21 @@ variable "zone" {
 variable "ssh_key_name" {
   description = "Nome da chave SSH cadastrada no IBM Cloud."
   type        = string
+  default     = ""
+  validation {
+    condition     = var.cos_only || var.ssh_key_name != ""
+    error_message = "Defina ssh_key_name para implantar a infraestrutura."
+  }
 }
 
 variable "ssh_public_key" {
   description = "Conteúdo da chave pública SSH."
   type        = string
+  default     = ""
+  validation {
+    condition     = var.cos_only || var.ssh_public_key != ""
+    error_message = "Defina ssh_public_key para implantar a infraestrutura."
+  }
 }
 
 ###############################################
@@ -73,6 +89,11 @@ variable "deploy_ontap_nodes" {
 variable "ontap_image_id" {
   description = "ID da imagem customizada ONTAP Select no IBM Cloud."
   type        = string
+  default     = ""
+  validation {
+    condition     = var.cos_only || var.ontap_image_id != ""
+    error_message = "Defina ontap_image_id para implantar a infraestrutura."
+  }
 }
 
 variable "ontap_profile" {
@@ -228,11 +249,21 @@ variable "converter_base_image_name" {
 variable "converter_ssh_key_name" {
   description = "Nome da chave SSH para acessar a instância helper."
   type        = string
+  default     = ""
+  validation {
+    condition     = var.cos_only || var.converter_ssh_key_name != ""
+    error_message = "Defina converter_ssh_key_name para implantar a instância helper."
+  }
 }
 
 variable "converter_ssh_public_key" {
   description = "Conteúdo da chave pública para a instância helper."
   type        = string
+  default     = ""
+  validation {
+    condition     = var.cos_only || var.converter_ssh_public_key != ""
+    error_message = "Defina converter_ssh_public_key para implantar a instância helper."
+  }
 }
 
 variable "converter_subnet" {
@@ -258,7 +289,7 @@ variable "converter_source_ova_url" {
   type        = string
   default     = ""
   validation {
-    condition     = var.converter_source_ova_url != ""
+    condition     = var.cos_only || var.converter_source_ova_url != ""
     error_message = "Defina converter_source_ova_url com a URL do OVA."
   }
 }
@@ -274,7 +305,7 @@ variable "converter_cos_bucket" {
   type        = string
   default     = ""
   validation {
-    condition     = var.converter_cos_bucket != ""
+    condition     = var.cos_only || var.converter_cos_bucket != ""
     error_message = "Defina converter_cos_bucket com o bucket de destino."
   }
 }

@@ -1,29 +1,34 @@
 resource "ibm_is_vpc" "ontap_vpc" {
-  name = var.vpc_name
+  count = local.infra_count
+  name  = var.vpc_name
 }
 
 resource "ibm_is_subnet" "mgmt" {
+  count           = local.infra_count
   name            = "${var.resource_prefix}-mgmt-subnet"
-  vpc             = ibm_is_vpc.ontap_vpc.id
+  vpc             = ibm_is_vpc.ontap_vpc[0].id
   zone            = var.zone
   ipv4_cidr_block = var.mgmt_subnet_cidr
 }
 
 resource "ibm_is_subnet" "data" {
+  count           = local.infra_count
   name            = "${var.resource_prefix}-data-subnet"
-  vpc             = ibm_is_vpc.ontap_vpc.id
+  vpc             = ibm_is_vpc.ontap_vpc[0].id
   zone            = var.zone
   ipv4_cidr_block = var.data_subnet_cidr
 }
 
 resource "ibm_is_security_group" "ontap_sg" {
-  name = "${var.resource_prefix}-sg"
-  vpc  = ibm_is_vpc.ontap_vpc.id
+  count = local.infra_count
+  name  = "${var.resource_prefix}-sg"
+  vpc   = ibm_is_vpc.ontap_vpc[0].id
 }
 
 # SSH
 resource "ibm_is_security_group_rule" "ssh_in" {
-  group     = ibm_is_security_group.ontap_sg.id
+  count     = local.infra_count
+  group     = ibm_is_security_group.ontap_sg[0].id
   direction = "inbound"
   remote    = var.allowed_ssh_cidr
   tcp {
@@ -34,7 +39,8 @@ resource "ibm_is_security_group_rule" "ssh_in" {
 
 # HTTPS (System Manager ONTAP)
 resource "ibm_is_security_group_rule" "https_in" {
-  group     = ibm_is_security_group.ontap_sg.id
+  count     = local.infra_count
+  group     = ibm_is_security_group.ontap_sg[0].id
   direction = "inbound"
   remote    = var.allowed_https_cidr
   tcp {
@@ -45,8 +51,8 @@ resource "ibm_is_security_group_rule" "https_in" {
 
 # Optional data protocols
 resource "ibm_is_security_group_rule" "nfs_in" {
-  count     = var.enable_nfs ? 1 : 0
-  group     = ibm_is_security_group.ontap_sg.id
+  count     = local.infra_count == 1 && var.enable_nfs ? 1 : 0
+  group     = ibm_is_security_group.ontap_sg[0].id
   direction = "inbound"
   remote    = var.allowed_https_cidr
   tcp {
@@ -56,8 +62,8 @@ resource "ibm_is_security_group_rule" "nfs_in" {
 }
 
 resource "ibm_is_security_group_rule" "smb_in" {
-  count     = var.enable_smb ? 1 : 0
-  group     = ibm_is_security_group.ontap_sg.id
+  count     = local.infra_count == 1 && var.enable_smb ? 1 : 0
+  group     = ibm_is_security_group.ontap_sg[0].id
   direction = "inbound"
   remote    = var.allowed_https_cidr
   tcp {
@@ -67,8 +73,8 @@ resource "ibm_is_security_group_rule" "smb_in" {
 }
 
 resource "ibm_is_security_group_rule" "iscsi_in" {
-  count     = var.enable_iscsi ? 1 : 0
-  group     = ibm_is_security_group.ontap_sg.id
+  count     = local.infra_count == 1 && var.enable_iscsi ? 1 : 0
+  group     = ibm_is_security_group.ontap_sg[0].id
   direction = "inbound"
   remote    = var.allowed_https_cidr
   tcp {

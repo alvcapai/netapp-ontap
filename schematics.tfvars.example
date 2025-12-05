@@ -1,6 +1,7 @@
 # Required values for IBM Schematics / terraform -var-file=schematics.tfvars
 # Copy to schematics.tfvars and fill with your real values (mark ibmcloud_api_key as secure in Schematics).
 
+cos_only         = false  # Set true to bootstrap only COS, then false for full deploy
 ibmcloud_api_key = "<your_ibm_cloud_api_key>"
 ssh_key_name     = "<your_ssh_key_name_in_ibm_cloud>"
 ssh_public_key   = "<ssh_rsa_or_ed25519_public_key_contents>"

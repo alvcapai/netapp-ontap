@@ -1,20 +1,29 @@
 data "ibm_is_image" "converter_base" {
-  name = var.converter_base_image_name
+  count = local.infra_count
+  name  = var.converter_base_image_name
 }
 
 resource "ibm_is_ssh_key" "converter_key" {
+  count      = local.infra_count
   name       = var.converter_ssh_key_name
   public_key = var.converter_ssh_public_key
 }
 
 locals {
-  converter_subnet_id = var.converter_subnet != "" ? var.converter_subnet : ibm_is_subnet.mgmt.id
-  converter_sg_id     = var.converter_security_group != "" ? var.converter_security_group : ibm_is_security_group.ontap_sg.id
+  converter_subnet_id = coalesce(
+    var.converter_subnet != "" ? var.converter_subnet : null,
+    try(ibm_is_subnet.mgmt[0].id, null),
+  )
+  converter_sg_id = coalesce(
+    var.converter_security_group != "" ? var.converter_security_group : null,
+    try(ibm_is_security_group.ontap_sg[0].id, null),
+  )
 }
 
 resource "ibm_is_instance" "converter" {
+  count   = local.infra_count
   name    = var.converter_instance_name
-  image   = data.ibm_is_image.converter_base.id
+  image   = data.ibm_is_image.converter_base[0].id
   profile = var.converter_profile
   zone    = var.converter_zone
 
@@ -23,8 +32,8 @@ resource "ibm_is_instance" "converter" {
     security_groups = [local.converter_sg_id]
   }
 
-  vpc  = ibm_is_vpc.ontap_vpc.id
-  keys = [ibm_is_ssh_key.converter_key.id]
+  vpc  = ibm_is_vpc.ontap_vpc[0].id
+  keys = [ibm_is_ssh_key.converter_key[0].id]
 
   user_data = templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {
     source_ova_url       = var.converter_source_ova_url

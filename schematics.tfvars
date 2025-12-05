@@ -1,5 +1,8 @@
 # This file is intentionally empty so values can be injected directly in IBM Schematics
-# workspace variables (UI/API). Required variables to set in the workspace:
+# workspace variables (UI/API).
+# 
+# Stage 1 (COS only): set cos_only=true and provide ibmcloud_api_key plus COS values.
+# Stage 2 (full deploy after uploading the image to COS): set cos_only=false and provide:
 #   - ibmcloud_api_key (Secure String)
 #   - ssh_key_name
 #   - ssh_public_key
