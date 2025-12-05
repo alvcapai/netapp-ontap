@@ -63,7 +63,7 @@ variable "ssh_key_name" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || var.ssh_key_name != ""
+    condition     = var.cos_only || !var.deploy_ontap || var.ssh_key_name != ""
     error_message = "Defina ssh_key_name para implantar a infraestrutura."
   }
 }
@@ -73,7 +73,7 @@ variable "ssh_public_key" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || var.ssh_public_key != ""
+    condition     = var.cos_only || !var.deploy_ontap || var.ssh_public_key != ""
     error_message = "Defina ssh_public_key para implantar a infraestrutura."
   }
 }
@@ -97,7 +97,7 @@ variable "ontap_image_id" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || var.ontap_image_id != ""
+    condition     = var.cos_only || !var.deploy_ontap || var.ontap_image_id != ""
     error_message = "Defina ontap_image_id para implantar a infraestrutura."
   }
 }

@@ -50,9 +50,8 @@ else:
 print("Download completed.")
 PYCODE
   - mkdir -p /mnt/ova && cd /mnt/ova && tar -xf /tmp/source.ova >> /var/log/converter.log 2>&1
-  - QCOW_OUT="/tmp/${output_object_key}"
   - SRC_DISK=$(ls /mnt/ova/*.vmdk | head -n1)
-  - qemu-img convert -f vmdk -O qcow2 "$${SRC_DISK}" "${QCOW_OUT}" >> /var/log/converter.log 2>&1
+  - qemu-img convert -f vmdk -O qcow2 "$${SRC_DISK}" "/tmp/${output_object_key}" >> /var/log/converter.log 2>&1
   - python3 - <<'PYCODE' >> /var/log/converter.log 2>&1
 import ibm_boto3
 from ibm_botocore.client import Config
