@@ -27,6 +27,7 @@ resource "ibm_is_subnet" "mgmt" {
   zone            = var.zone
   ipv4_cidr_block = var.mgmt_subnet_cidr
   resource_group  = ibm_resource_group.rg.id
+  depends_on      = [ibm_is_vpc_address_prefix.mgmt]
 }
 
 resource "ibm_is_subnet" "data" {
@@ -36,6 +37,7 @@ resource "ibm_is_subnet" "data" {
   zone            = var.zone
   ipv4_cidr_block = var.data_subnet_cidr
   resource_group  = ibm_resource_group.rg.id
+  depends_on      = [ibm_is_vpc_address_prefix.data]
 }
 
 resource "ibm_is_security_group" "ontap_sg" {

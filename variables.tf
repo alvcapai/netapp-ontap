@@ -74,6 +74,12 @@ variable "ssh_key_name" {
   }
 }
 
+variable "use_existing_ssh_key" {
+  description = "Se true, usa uma chave SSH já existente com o nome ssh_key_name; se false, cria a chave com ssh_public_key."
+  type        = bool
+  default     = false
+}
+
 variable "ssh_public_key" {
   description = "Conteúdo da chave pública SSH."
   type        = string
