@@ -28,7 +28,7 @@ resource "ibm_is_instance" "converter" {
   }
 
   vpc  = ibm_is_vpc.ontap_vpc[0].id
-  keys = [local.ssh_key_id]
+  keys = [ibm_is_ssh_key.ssh[0].id]
   resource_group = ibm_resource_group.rg.id
 
   user_data = local.infra_enabled ? templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {

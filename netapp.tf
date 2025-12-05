@@ -1,17 +1,8 @@
-data "ibm_is_ssh_key" "existing_ssh" {
-  count = var.use_existing_ssh_key ? 1 : 0
-  name  = var.ssh_key_name
-}
-
 resource "ibm_is_ssh_key" "ssh" {
-  count          = local.ssh_key_create_count
+  count          = local.infra_count
   name           = var.ssh_key_name
   public_key     = var.ssh_public_key
   resource_group = ibm_resource_group.rg.id
-}
-
-locals {
-  ssh_key_id = var.use_existing_ssh_key ? data.ibm_is_ssh_key.existing_ssh[0].id : ibm_is_ssh_key.ssh[0].id
 }
 
 resource "ibm_is_instance" "ontap_node1" {
@@ -32,7 +23,7 @@ resource "ibm_is_instance" "ontap_node1" {
   }
 
   vpc            = ibm_is_vpc.ontap_vpc[0].id
-  keys           = [local.ssh_key_id]
+  keys           = [ibm_is_ssh_key.ssh[0].id]
   resource_group = ibm_resource_group.rg.id
 
   boot_volume {
