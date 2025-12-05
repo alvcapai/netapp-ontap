@@ -10,7 +10,6 @@ resource "ibm_is_vpc_address_prefix" "mgmt" {
   zone           = var.zone
   vpc            = ibm_is_vpc.ontap_vpc[0].id
   cidr           = var.mgmt_subnet_cidr
-  resource_group = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_vpc_address_prefix" "data" {
@@ -19,7 +18,6 @@ resource "ibm_is_vpc_address_prefix" "data" {
   zone           = var.zone
   vpc            = ibm_is_vpc.ontap_vpc[0].id
   cidr           = var.data_subnet_cidr
-  resource_group = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_subnet" "mgmt" {
