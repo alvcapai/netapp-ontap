@@ -13,7 +13,7 @@ resource "ibm_resource_instance" "cos" {
 resource "ibm_cos_bucket" "ontap_image" {
   bucket_name          = var.cos_bucket_name
   resource_instance_id = ibm_resource_instance.cos.guid
-  bucket_location      = var.region
+  region_location      = var.region
   storage_class        = "standard"
   force_delete         = true
 }
