@@ -23,6 +23,6 @@ resource "ibm_cos_bucket_object" "ontap_image_object" {
   bucket_crn = ibm_cos_bucket.ontap_image.crn
   key        = var.ontap_image_object_key
   source     = var.ontap_image_file
-  etag       = filemd5(var.ontap_image_file)
+  etag       = var.upload_local_image ? filemd5(var.ontap_image_file) : null
   region     = var.region
 }
