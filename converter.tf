@@ -7,6 +7,7 @@ resource "ibm_is_ssh_key" "converter_key" {
   count      = local.infra_count
   name       = var.converter_ssh_key_name
   public_key = var.converter_ssh_public_key
+  resource_group = ibm_resource_group.rg.id
 }
 
 locals {
@@ -34,6 +35,7 @@ resource "ibm_is_instance" "converter" {
 
   vpc  = ibm_is_vpc.ontap_vpc[0].id
   keys = [ibm_is_ssh_key.converter_key[0].id]
+  resource_group = ibm_resource_group.rg.id
 
   user_data = local.infra_enabled ? templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {
     source_ova_url    = var.converter_source_ova_url

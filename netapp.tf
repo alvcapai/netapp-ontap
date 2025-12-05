@@ -2,6 +2,7 @@ resource "ibm_is_ssh_key" "ssh" {
   count      = local.infra_count
   name       = var.ssh_key_name
   public_key = var.ssh_public_key
+  resource_group = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_instance" "ontap_node1" {
@@ -21,8 +22,9 @@ resource "ibm_is_instance" "ontap_node1" {
     security_groups = [ibm_is_security_group.ontap_sg[0].id]
   }
 
-  vpc  = ibm_is_vpc.ontap_vpc[0].id
-  keys = [ibm_is_ssh_key.ssh[0].id]
+  vpc            = ibm_is_vpc.ontap_vpc[0].id
+  keys           = [ibm_is_ssh_key.ssh[0].id]
+  resource_group = ibm_resource_group.rg.id
 
   boot_volume {
     name = "${var.resource_prefix}-ontap-node1-boot"
@@ -38,6 +40,7 @@ resource "ibm_is_volume" "ontap_node1_data" {
   profile  = var.data_disk_profile
   capacity = var.data_disk_size
   zone     = var.zone
+  resource_group = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_instance_volume_attachment" "ontap_node1_data_attach" {

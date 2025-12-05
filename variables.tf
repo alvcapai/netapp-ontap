@@ -20,6 +20,12 @@ variable "region" {
   default     = "us-south"
 }
 
+variable "resource_group_name" {
+  description = "Nome do resource group a ser criado e usado em todos os recursos."
+  type        = string
+  default     = "ontap-rg"
+}
+
 ###############################################
 # Configuração da VPC e Rede
 ###############################################

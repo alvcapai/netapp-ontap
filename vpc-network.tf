@@ -1,6 +1,7 @@
 resource "ibm_is_vpc" "ontap_vpc" {
-  count = local.infra_count
-  name  = var.vpc_name
+  count          = local.infra_count
+  name           = var.vpc_name
+  resource_group = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_subnet" "mgmt" {
@@ -9,6 +10,7 @@ resource "ibm_is_subnet" "mgmt" {
   vpc             = ibm_is_vpc.ontap_vpc[0].id
   zone            = var.zone
   ipv4_cidr_block = var.mgmt_subnet_cidr
+  resource_group  = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_subnet" "data" {
@@ -17,12 +19,14 @@ resource "ibm_is_subnet" "data" {
   vpc             = ibm_is_vpc.ontap_vpc[0].id
   zone            = var.zone
   ipv4_cidr_block = var.data_subnet_cidr
+  resource_group  = ibm_resource_group.rg.id
 }
 
 resource "ibm_is_security_group" "ontap_sg" {
-  count = local.infra_count
-  name  = "${var.resource_prefix}-sg"
-  vpc   = ibm_is_vpc.ontap_vpc[0].id
+  count          = local.infra_count
+  name           = "${var.resource_prefix}-sg"
+  vpc            = ibm_is_vpc.ontap_vpc[0].id
+  resource_group = ibm_resource_group.rg.id
 }
 
 # SSH
