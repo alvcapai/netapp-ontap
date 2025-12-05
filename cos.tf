@@ -11,11 +11,11 @@ resource "ibm_resource_instance" "cos" {
 }
 
 resource "ibm_cos_bucket" "ontap_image" {
-  bucket              = var.cos_bucket_name
-  resource_instance_id = ibm_resource_instance.cos.id
-  region              = var.region
-  storage_class       = "standard"
-  force_delete        = true
+  bucket_name           = var.cos_bucket_name
+  resource_instance_id  = ibm_resource_instance.cos.guid
+  region_location       = var.region
+  storage_class         = "standard"
+  force_delete          = true
 }
 
 resource "ibm_cos_bucket_object" "ontap_image_object" {
@@ -24,5 +24,4 @@ resource "ibm_cos_bucket_object" "ontap_image_object" {
   key        = var.ontap_image_object_key
   source     = var.ontap_image_file
   etag       = var.upload_local_image ? filemd5(var.ontap_image_file) : null
-  region     = var.region
 }

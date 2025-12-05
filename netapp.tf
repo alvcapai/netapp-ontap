@@ -23,7 +23,7 @@ resource "ibm_is_instance" "ontap_node1" {
 
   boot_volume {
     name = "${var.resource_prefix}-ontap-node1-boot"
-    size = var.boot_volume_size
+    capacity = var.boot_volume_size
   }
 
   user_data = file("${path.module}/cloud-init-ontap-node1.yaml")
