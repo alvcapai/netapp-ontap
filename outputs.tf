@@ -24,3 +24,13 @@ output "cos_hmac_secret_key" {
   value       = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["secret_access_key"]
   sensitive   = true
 }
+
+output "secret_manager_hmac_secret_id" {
+  description = "ID do segredo HMAC no Secrets Manager."
+  value       = ibm_sm_arbitrary_secret.cos_hmac.id
+}
+
+output "secret_manager_hmac_secret_name" {
+  description = "Nome do segredo HMAC no Secrets Manager."
+  value       = ibm_sm_arbitrary_secret.cos_hmac.name
+}

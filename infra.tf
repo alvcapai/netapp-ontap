@@ -117,6 +117,19 @@ resource "ibm_resource_key" "cos_hmac" {
   resource_group_id = ibm_resource_group.rg.id
 }
 
+resource "ibm_sm_arbitrary_secret" "cos_hmac" {
+  instance_id     = ibm_resource_instance.secrets_manager.id
+  secret_group_id = "default"
+  name            = "${var.cos_instance_name}-hmac"
+  payload = jsonencode({
+    access_key_id     = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["access_key_id"]
+    secret_access_key = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["secret_access_key"]
+    endpoint          = "https://s3.${var.region}.cloud-object-storage.appdomain.cloud/${ibm_cos_bucket.images.bucket_name}"
+    bucket            = ibm_cos_bucket.images.bucket_name
+    region            = var.region
+  })
+}
+
 locals {
   converter_cloud_init = <<-EOT
     #cloud-config
