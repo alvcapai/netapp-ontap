@@ -52,6 +52,11 @@ variable "ssh_public_key" {
   }
 }
 
+variable "use_existing_ssh_key" {
+  description = "Se true, reutiliza a chave pelo nome; se false, cria usando ssh_public_key."
+  type        = bool
+  default     = true
+}
 variable "instance_name" {
   description = "Nome da instância."
   type        = string

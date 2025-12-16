@@ -10,7 +10,13 @@ data "ibm_is_image" "base" {
   name = var.instance_image_name
 }
 
+data "ibm_is_ssh_key" "ssh" {
+  count = var.use_existing_ssh_key ? 1 : 0
+  name  = var.ssh_key_name
+}
+
 resource "ibm_is_ssh_key" "ssh" {
+  count          = var.use_existing_ssh_key ? 0 : 1
   name           = var.ssh_key_name
   public_key     = var.ssh_public_key
   resource_group = ibm_resource_group.rg.id
@@ -67,7 +73,7 @@ resource "ibm_is_instance" "vm" {
   }
 
   vpc            = ibm_is_vpc.vpc.id
-  keys           = [ibm_is_ssh_key.ssh.id]
+  keys           = [local.ssh_key_id]
   resource_group = ibm_resource_group.rg.id
 }
 
@@ -162,4 +168,6 @@ locals {
     runcmd:
       - pip3 install --upgrade pip ibm-cos-sdk ibm-cos-sdk-s3transfer
   EOT
+
+  ssh_key_id = var.use_existing_ssh_key ? data.ibm_is_ssh_key.ssh[0].id : ibm_is_ssh_key.ssh[0].id
 }
