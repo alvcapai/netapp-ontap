@@ -79,7 +79,7 @@ variable "cos_instance_name" {
 variable "cos_bucket_name" {
   description = "Nome do bucket para armazenar imagens."
   type        = string
-  default     = "Images-netapp"
+  default     = "images-netapp"
 }
 
 variable "converter_output_object_key" {

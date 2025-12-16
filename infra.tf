@@ -10,10 +10,8 @@ data "ibm_is_image" "base" {
   name = var.instance_image_name
 }
 
-resource "ibm_is_ssh_key" "ssh" {
-  name           = var.ssh_key_name
-  public_key     = var.ssh_public_key
-  resource_group = ibm_resource_group.rg.id
+data "ibm_is_ssh_key" "ssh" {
+  name = var.ssh_key_name
 }
 
 resource "ibm_is_vpc" "vpc" {
@@ -67,7 +65,7 @@ resource "ibm_is_instance" "vm" {
   }
 
   vpc            = ibm_is_vpc.vpc.id
-  keys           = [ibm_is_ssh_key.ssh.id]
+  keys           = [data.ibm_is_ssh_key.ssh.id]
   resource_group = ibm_resource_group.rg.id
 }
 
