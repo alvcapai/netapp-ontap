@@ -99,6 +99,24 @@ resource "ibm_cos_bucket" "images" {
   force_delete         = true
 }
 
+resource "ibm_resource_instance" "secrets_manager" {
+  name              = var.secret_manager_instance_name
+  service           = "secrets-manager"
+  plan              = "standard"
+  location          = var.region
+  resource_group_id = ibm_resource_group.rg.id
+}
+
+resource "ibm_resource_key" "cos_hmac" {
+  name                 = "${var.cos_instance_name}-hmac"
+  resource_instance_id = ibm_resource_instance.cos.id
+  role                 = "Writer"
+  parameters = {
+    HMAC = true
+  }
+  resource_group_id = ibm_resource_group.rg.id
+}
+
 locals {
   converter_cloud_init = <<-EOT
     #cloud-config

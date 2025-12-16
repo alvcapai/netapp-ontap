@@ -12,3 +12,15 @@ output "cos_upload_url" {
   description = "Endpoint público HTTPS para upload (s3 API)."
   value       = "https://s3.${var.region}.cloud-object-storage.appdomain.cloud/${ibm_cos_bucket.images.bucket_name}"
 }
+
+output "cos_hmac_access_key" {
+  description = "HMAC access key para uploads autenticados no COS."
+  value       = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["access_key_id"]
+  sensitive   = true
+}
+
+output "cos_hmac_secret_key" {
+  description = "HMAC secret key para uploads autenticados no COS."
+  value       = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["secret_access_key"]
+  sensitive   = true
+}

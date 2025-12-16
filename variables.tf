@@ -92,3 +92,9 @@ variable "converter_output_object_key" {
   type        = string
   default     = "converted.qcow2"
 }
+
+variable "secret_manager_instance_name" {
+  description = "Nome da instância do Secrets Manager."
+  type        = string
+  default     = "netapp-secrets"
+}
