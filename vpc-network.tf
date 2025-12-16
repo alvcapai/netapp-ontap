@@ -5,19 +5,19 @@ resource "ibm_is_vpc" "ontap_vpc" {
 }
 
 resource "ibm_is_vpc_address_prefix" "mgmt" {
-  count          = local.infra_count
-  name           = "${var.resource_prefix}-mgmt-prefix"
-  zone           = var.zone
-  vpc            = ibm_is_vpc.ontap_vpc[0].id
-  cidr           = var.mgmt_subnet_cidr
+  count = local.infra_count
+  name  = "${var.resource_prefix}-mgmt-prefix"
+  zone  = var.zone
+  vpc   = ibm_is_vpc.ontap_vpc[0].id
+  cidr  = var.mgmt_subnet_cidr
 }
 
 resource "ibm_is_vpc_address_prefix" "data" {
-  count          = local.infra_count
-  name           = "${var.resource_prefix}-data-prefix"
-  zone           = var.zone
-  vpc            = ibm_is_vpc.ontap_vpc[0].id
-  cidr           = var.data_subnet_cidr
+  count = local.infra_count
+  name  = "${var.resource_prefix}-data-prefix"
+  zone  = var.zone
+  vpc   = ibm_is_vpc.ontap_vpc[0].id
+  cidr  = var.data_subnet_cidr
 }
 
 resource "ibm_is_subnet" "mgmt" {

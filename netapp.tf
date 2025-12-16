@@ -1,5 +1,5 @@
 resource "ibm_is_ssh_key" "ssh" {
-  count          = local.infra_count
+  count          = (local.ontap_enabled || (local.infra_enabled && local.converter_uses_main_key)) ? 1 : 0
   name           = var.ssh_key_name
   public_key     = var.ssh_public_key
   resource_group = ibm_resource_group.rg.id
@@ -35,11 +35,11 @@ resource "ibm_is_instance" "ontap_node1" {
 }
 
 resource "ibm_is_volume" "ontap_node1_data" {
-  count    = local.ontap_enabled ? var.data_disks_per_node : 0
-  name     = "${var.resource_prefix}-ontap-node1-data-${count.index + 1}"
-  profile  = var.data_disk_profile
-  capacity = var.data_disk_size
-  zone     = var.zone
+  count          = local.ontap_enabled ? var.data_disks_per_node : 0
+  name           = "${var.resource_prefix}-ontap-node1-data-${count.index + 1}"
+  profile        = var.data_disk_profile
+  capacity       = var.data_disk_size
+  zone           = var.zone
   resource_group = ibm_resource_group.rg.id
 }
 
