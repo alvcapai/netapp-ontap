@@ -15,13 +15,13 @@ output "cos_upload_url" {
 
 output "cos_hmac_access_key" {
   description = "HMAC access key para uploads autenticados no COS."
-  value       = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["access_key_id"]
+  value       = local.cos_hmac_access_key
   sensitive   = true
 }
 
 output "cos_hmac_secret_key" {
   description = "HMAC secret key para uploads autenticados no COS."
-  value       = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["secret_access_key"]
+  value       = local.cos_hmac_secret_key
   sensitive   = true
 }
 

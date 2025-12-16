@@ -121,8 +121,8 @@ resource "ibm_sm_arbitrary_secret" "cos_hmac" {
   secret_group_id = "default"
   name            = "${var.cos_instance_name}-hmac"
   payload = jsonencode({
-    access_key_id     = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["access_key_id"]
-    secret_access_key = ibm_resource_key.cos_hmac.credentials["cos_hmac_keys"]["secret_access_key"]
+    access_key_id     = local.cos_hmac_access_key
+    secret_access_key = local.cos_hmac_secret_key
     endpoint          = "https://s3.${var.region}.cloud-object-storage.appdomain.cloud/${ibm_cos_bucket.images.bucket_name}"
     bucket            = ibm_cos_bucket.images.bucket_name
     region            = var.region
@@ -206,4 +206,8 @@ locals {
   EOT
 
   ssh_key_id = var.use_existing_ssh_key ? data.ibm_is_ssh_key.ssh[0].id : ibm_is_ssh_key.ssh[0].id
+
+  cos_hmac_creds      = jsondecode(ibm_resource_key.cos_hmac.credentials_json)
+  cos_hmac_access_key = local.cos_hmac_creds["cos_hmac_keys"]["access_key_id"]
+  cos_hmac_secret_key = local.cos_hmac_creds["cos_hmac_keys"]["secret_access_key"]
 }
