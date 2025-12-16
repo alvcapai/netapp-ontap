@@ -1,3 +1,0 @@
-#cloud-config
-runcmd:
-  - echo "Placeholder ONTAP cloud-init executed" > /var/log/ontap-cloud-init.log
