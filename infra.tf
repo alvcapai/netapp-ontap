@@ -114,7 +114,6 @@ resource "ibm_resource_key" "cos_hmac" {
   parameters = {
     HMAC = true
   }
-  resource_group_id = ibm_resource_group.rg.id
 }
 
 resource "ibm_sm_arbitrary_secret" "cos_hmac" {
