@@ -69,8 +69,8 @@ variable "ssh_key_name" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || (!var.deploy_ontap && var.converter_ssh_key_name != "" && var.converter_ssh_public_key != "") || var.ssh_key_name != ""
-    error_message = "Defina ssh_key_name (ou forneça converter_ssh_* se estiver implantando apenas o helper)."
+    condition     = var.cos_only || var.ssh_key_name != ""
+    error_message = "Defina ssh_key_name para implantar a infraestrutura."
   }
 }
 
@@ -79,8 +79,8 @@ variable "ssh_public_key" {
   type        = string
   default     = ""
   validation {
-    condition     = var.cos_only || (!var.deploy_ontap && var.converter_ssh_key_name != "" && var.converter_ssh_public_key != "") || var.ssh_public_key != ""
-    error_message = "Defina ssh_public_key (ou forneça converter_ssh_* se estiver implantando apenas o helper)."
+    condition     = var.cos_only || var.ssh_public_key != ""
+    error_message = "Defina ssh_public_key para implantar a infraestrutura."
   }
 }
 
@@ -268,20 +268,12 @@ variable "converter_ssh_key_name" {
   description = "Nome da chave SSH para acessar a instância helper."
   type        = string
   default     = ""
-  validation {
-    condition     = var.cos_only || var.converter_ssh_key_name != "" || var.ssh_key_name != ""
-    error_message = "Defina converter_ssh_key_name ou reutilize ssh_key_name."
-  }
 }
 
 variable "converter_ssh_public_key" {
   description = "Conteúdo da chave pública para a instância helper."
   type        = string
   default     = ""
-  validation {
-    condition     = var.cos_only || var.converter_ssh_public_key != "" || var.ssh_public_key != ""
-    error_message = "Defina converter_ssh_public_key ou reutilize ssh_public_key."
-  }
 }
 
 variable "converter_subnet" {

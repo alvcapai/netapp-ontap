@@ -15,13 +15,6 @@ locals {
   ) : null
 }
 
-resource "ibm_is_ssh_key" "converter_ssh" {
-  count          = local.infra_enabled && !local.converter_uses_main_key ? 1 : 0
-  name           = local.converter_ssh_key_name
-  public_key     = local.converter_ssh_public_key
-  resource_group = ibm_resource_group.rg.id
-}
-
 resource "ibm_is_instance" "converter" {
   count   = local.infra_count
   name    = var.converter_instance_name
@@ -34,10 +27,8 @@ resource "ibm_is_instance" "converter" {
     security_groups = [local.converter_sg_id]
   }
 
-  vpc = ibm_is_vpc.ontap_vpc[0].id
-  keys = [
-    local.converter_uses_main_key ? ibm_is_ssh_key.ssh[0].id : ibm_is_ssh_key.converter_ssh[0].id
-  ]
+  vpc            = ibm_is_vpc.ontap_vpc[0].id
+  keys           = [ibm_is_ssh_key.ssh[0].id]
   resource_group = ibm_resource_group.rg.id
 
   user_data = local.infra_enabled ? templatefile("${path.module}/templates/converter-cloud-init.sh.tmpl", {
