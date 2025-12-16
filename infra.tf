@@ -77,6 +77,12 @@ resource "ibm_is_instance" "vm" {
   resource_group = ibm_resource_group.rg.id
 }
 
+resource "ibm_is_floating_ip" "vm_fip" {
+  name           = "${var.instance_name}-fip"
+  target         = ibm_is_instance.vm.primary_network_interface[0].id
+  resource_group = ibm_resource_group.rg.id
+}
+
 resource "ibm_resource_instance" "cos" {
   name              = var.cos_instance_name
   service           = "cloud-object-storage"
