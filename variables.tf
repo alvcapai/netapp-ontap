@@ -98,3 +98,9 @@ variable "secret_manager_instance_name" {
   type        = string
   default     = "netapp-secrets"
 }
+
+variable "secrets_manager_endpoint_wait" {
+  description = "Tempo de espera para a criação do DNS público do Secrets Manager (ex: 90s, 2m)."
+  type        = string
+  default     = "90s"
+}

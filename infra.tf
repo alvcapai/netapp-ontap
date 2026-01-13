@@ -117,10 +117,16 @@ resource "ibm_resource_key" "cos_hmac" {
   }
 }
 
+resource "time_sleep" "wait_for_sm_endpoint" {
+  depends_on      = [ibm_resource_instance.secrets_manager]
+  create_duration = var.secrets_manager_endpoint_wait
+}
+
 resource "ibm_sm_arbitrary_secret" "cos_hmac" {
   instance_id     = ibm_resource_instance.secrets_manager.guid
   secret_group_id = "default"
   name            = "${var.cos_instance_name}-hmac"
+  depends_on      = [time_sleep.wait_for_sm_endpoint]
   payload = jsonencode({
     access_key_id     = local.cos_hmac_access_key
     secret_access_key = local.cos_hmac_secret_key
