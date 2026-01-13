@@ -104,6 +104,7 @@ resource "ibm_resource_instance" "secrets_manager" {
   service           = "secrets-manager"
   plan              = "standard"
   location          = var.region
+  service_endpoints = "public"
   resource_group_id = ibm_resource_group.rg.id
 }
 
