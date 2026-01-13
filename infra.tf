@@ -117,7 +117,7 @@ resource "ibm_resource_key" "cos_hmac" {
 }
 
 resource "ibm_sm_arbitrary_secret" "cos_hmac" {
-  instance_id     = ibm_resource_instance.secrets_manager.id
+  instance_id     = ibm_resource_instance.secrets_manager.guid
   secret_group_id = "default"
   name            = "${var.cos_instance_name}-hmac"
   payload = jsonencode({
