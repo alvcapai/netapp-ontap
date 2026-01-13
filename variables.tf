@@ -106,7 +106,7 @@ variable "secrets_manager_endpoint_wait" {
 }
 
 variable "secrets_manager_recreate_token" {
-  description = "Altere este valor para forcar a recriacao do Secrets Manager e provisionar endpoint publico."
+  description = "Altere este valor para forcar a recriacao do Secrets Manager e provisionar endpoint privado."
   type        = string
-  default     = "0"
+  default     = "1"
 }

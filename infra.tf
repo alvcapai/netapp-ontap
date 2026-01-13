@@ -104,7 +104,7 @@ resource "ibm_resource_instance" "secrets_manager" {
   service           = "secrets-manager"
   plan              = "standard"
   location          = var.region
-  service_endpoints = "public"
+  service_endpoints = "private"
   resource_group_id = ibm_resource_group.rg.id
   lifecycle {
     replace_triggered_by = [terraform_data.secrets_manager_recreate]
