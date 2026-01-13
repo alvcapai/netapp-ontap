@@ -104,3 +104,9 @@ variable "secrets_manager_endpoint_wait" {
   type        = string
   default     = "90s"
 }
+
+variable "secrets_manager_recreate_token" {
+  description = "Altere este valor para forcar a recriacao do Secrets Manager e provisionar endpoint publico."
+  type        = string
+  default     = "0"
+}

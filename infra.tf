@@ -106,6 +106,13 @@ resource "ibm_resource_instance" "secrets_manager" {
   location          = var.region
   service_endpoints = "public"
   resource_group_id = ibm_resource_group.rg.id
+  lifecycle {
+    replace_triggered_by = [terraform_data.secrets_manager_recreate]
+  }
+}
+
+resource "terraform_data" "secrets_manager_recreate" {
+  input = var.secrets_manager_recreate_token
 }
 
 resource "ibm_resource_key" "cos_hmac" {
